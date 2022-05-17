@@ -7,7 +7,6 @@ from IPython import embed as e
 
 
 def nonsmooth_exp(beta, q, yk, baseline, m, R, panelty=3e3):
-    grad = m**10 / np.linalg.norm(m**10,1)
 
     def f_beta(_input):
         x, alpha = _input[:3], _input[3]
@@ -142,6 +141,8 @@ def nonsmooth_exp(beta, q, yk, baseline, m, R, panelty=3e3):
     {(alpha - base_VaR)/base_VaR*100:.2f}\t \
     {CVaR:.5f}\t{(CVaR - base_CVaR)/base_CVaR*100:.2f}")
 
+    e() or b
+
 
 if __name__ == "__main__":
 
@@ -168,6 +169,6 @@ if __name__ == "__main__":
         for q in qs:
             np.random.seed(2021)
             yk = y_dist.rvs(q)
-            nonsmooth_exp(beta, q, yk, baselines[i])
+            nonsmooth_exp(beta, q, yk, baselines[i], m, R)
             break
         # break

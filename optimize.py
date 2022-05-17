@@ -4,6 +4,7 @@ import cvxpy as cp
 import time
 import sys
 from nonsmooth import nonsmooth_exp
+from bfgs import bfgs_exp
 
 m = np.array([0.0101110, 0.0043532, 0.0137058])
 V = np.array([[0.00324625, 0.00022983, 0.00420395], 
@@ -64,6 +65,8 @@ for i, beta in enumerate(betas):
             experiment(beta, q, yk, baselines[i])
         elif sys.argv[1] == 'nonsmooth':
             nonsmooth_exp(beta, q, yk, baselines[i], m, R)
+        elif sys.argv[1] == 'bfgs':
+            bfgs_exp(beta, q, yk, baselines[i], m, R)
         else:
             print("Please enter algorithm type")
 

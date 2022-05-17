@@ -1,6 +1,9 @@
 from scipy.stats import multivariate_normal
 import numpy as np
 import cvxpy as cp
+import time
+import sys
+from nonsmooth import nonsmooth_exp
 
 m = np.array([0.0101110, 0.0043532, 0.0137058])
 V = np.array([[0.00324625, 0.00022983, 0.00420395], 
@@ -46,9 +49,22 @@ def experiment(beta, q, yk, baseline):
 
 print("beta\tSample#\tS&P\tBond\tSmall Cap\tValue-at-Risk\tVaR Dif(%)\tCond VaR\tCVaR Dif(%)")
 
+yks = []
+np.random.seed(2021)
+for q in qs:
+    yks.append(y_dist.rvs(q))
+
+from IPython import embed as e
+start = time.time()
 for i, beta in enumerate(betas):
-    for q in qs:
-        yk = y_dist.rvs(q)
-        experiment(beta, q, yk, baselines[i])
-    #     break
-    # break
+    for j, q in enumerate(qs):
+        yk = yks[j]
+        
+        if sys.argv[1] == 'cvxpy': 
+            experiment(beta, q, yk, baselines[i])
+        elif sys.argv[1] == 'nonsmooth':
+            nonsmooth_exp(beta, q, yk, baselines[i], m, R)
+        else:
+            print("Please enter algorithm type")
+
+print("Total time:", time.time() - start)
